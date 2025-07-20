@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_cors import cross_origin
 import joblib
 import pandas as pd
 import os
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Rutas a los pipelines
 PIPE_DESMP = os.path.join('resources', 'pipeline_desempeno.pkl')
@@ -20,6 +23,7 @@ def home():
 
 # Ruta para predecir DESEMPEÑO DEL ALUMNO
 @app.route('/predict_desempeno', methods=['POST'])
+@cross_origin(origin='http://localhost:5173')
 def predict_desempeno():
     try:
         data = request.get_json(force=True)
@@ -32,6 +36,7 @@ def predict_desempeno():
 
 # Ruta para predecir SE DIO DE BAJA
 @app.route('/predict_desercion', methods=['POST'])
+@cross_origin(origin='http://localhost:5173')
 def predict_desercion():
     try:
         data = request.get_json(force=True)
